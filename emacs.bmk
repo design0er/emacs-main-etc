@@ -1,0 +1,26 @@
+;;;; Emacs Bookmark Format Version 1 ;;;;
+;;; This format is meant to be slightly human-readable;
+;;; nevertheless, you probably don't want to edit it.
+;;; -*- End Of Bookmark File Format Version Stamp -*-
+(("basic"
+ (filename . "e:/emacs-etc/basic")
+ (front-context-string . "(defun insert-cu")
+ (rear-context-string . "rt-current-date\n")
+ (position . 30625))
+(#("org" 0 1
+   (icicle-mode-line-help #1="File `e:/PRO/hunter/org/hunter.org', position 413" help-echo #1#)
+   1 3
+   (help-echo #1#))
+ (filename . "e:/PRO/hunter/org/hunter.org")
+ (front-context-string . "ng\n* QUESTION\n**")
+ (rear-context-string . "l\n  + news readi")
+ (position . 413))
+(#("emacs1" 0 1
+   (icicle-mode-line-help #1="File `e:/emacs-etc/', position 239" help-echo #1#)
+   1 6
+   (help-echo #1#))
+ (filename . "e:/emacs-etc/")
+ (front-context-string)
+ (rear-context-string . "756 06-10 22:01 ")
+ (position . 239))
+)
