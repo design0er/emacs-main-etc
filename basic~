@@ -261,7 +261,7 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 ;which one effect?
 ;(setq auto-complete-mode t)
 (global-auto-complete-mode t)
-;;;(define-key ac-mode-map (kbd "F2") 'auto-complete)
+(define-key ac-mode-map (kbd "f2") 'auto-complete)
 ;;;(ac-set-trigger-key "TAB")
 ;;;(setq ac-auto-start nil)
 ;;;(setq ac-auto-start 3)
@@ -594,8 +594,9 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 
 (setq org-hide-leading-stars t)
 (setq org-todo-keywords
-	  '((type "work(w!)" "life(l!)" "mind(m!)")
-		(sequence "DOING(i!)" "DONE(e!)" "|" "PRE(p!)" "CODING(c@!)" "DEBUG(d@!)" "RELEASE(r!)" "MAINTAIN(m@!)" "PAUSE(a@!)")))
+	  '((type "work(w!)" "diary(d!)" "mind(m!)" "pro(p!)")
+		(sequence "DOING(i!)" "DONE(e!)" "|" "PRE(p!)" "CODING(c@!)" "DEBUG(d@!)" "RELEASE(r!)" "MAINTAIN(m@!)" "PAUSE(a@!)"
+				  "|"  "X1(1@!)" "X2(2@!)" "X3(3@!)" "X4(4@!)" "X8(8@!)" "X10(0@!)")))
 (setq org-todo-keyword-faces
 	  '(("work" .      (:background "red" :foreground "white" :weight bold))
 		("life" .      (:background "white" :foreground "red" :weight bold))

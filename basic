@@ -152,7 +152,7 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 (show-paren-mode 1)				
 ;显示时间
 (display-time)
-
+(setq display-time-24hr-format t)
 ;显示匹配的括号
 (show-paren-mode t)
 
@@ -261,7 +261,13 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 ;which one effect?
 ;(setq auto-complete-mode t)
 (global-auto-complete-mode t)
-(define-key ac-mode-map (kbd "f2") 'auto-complete)
+(global-set-key (kbd "<f2>") 'auto-complete-mode)
+;(define-key ac-mode-map [f2] )
+;(local-unset-key (kbd "<f2>"))
+;(local-unset-key [f2])
+;		(local-unset-key "f2")
+;		(global-unset-key "f")
+;		(global-unset-key "f2")
 ;;;(ac-set-trigger-key "TAB")
 ;;;(setq ac-auto-start nil)
 ;;;(setq ac-auto-start 3)
@@ -853,8 +859,16 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
                    (forward-word arg)
                    (point)))
       (activate-mark))))
-(global-set-key "\C-cw" 'my-mark-current-word)
+(defun copy-word (&optional arg)
+ "Copy words at point"
+ (interactive "P")
+ (let ((beg (progn (if (looking-back "[a-zA-Z0-9]" 1) (backward-word 1)) (point))) 
+	(end (progn (forward-word arg) (point))))
+ (copy-region-as-kill beg end))
+)
 
+(global-set-key "\C-cs" 'my-mark-current-word)
+(global-set-key "\C-cS" 'copy-word)
 ;;;; MakingMarkVisible
 ;;; Author: Patrick Gundlach 
 ;;; nice mark - shows mark as a highlighted 'cursor' so user 'always' 
@@ -912,21 +926,18 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
     ;(insert (format-time-string "%Y/%m/%d %H:%M:%S" (current-time))))
     (insert (format-time-string "%H:%M:%S" (current-time))))
 (global-set-key "\C-cw" 'insert-current-time) 
-;;;--------------------------------------------------
 ;;;	weibo
-;;;--------------------------------------------------
 (add-to-list 'load-path "e:/emacs-plugin/weibo.emacs-master/weibo.emacs-master/")
-
 (require 'weibo)
 
 (setq url-using-proxy nil)
-(setq url-using-proxy t)
-(setq url-proxy-services '(("http"  . "http://127.0.0.1:8087")
-                            "https" . "http://127.0.0.1:8087")) 
+;(setq url-using-proxy t)
+;(setq url-proxy-services '(("http"  . "http://127.0.0.1:8087")
+;                            "https" . "http://127.0.0.1:8087"))
+
 (add-to-list 'load-path (concat os-plugin-path "/evil/"))
 (require 'evil)  
-(evil-mode 1)
-
+;(evil-mode 1)
 
 ;;;c# mode
 (autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
@@ -941,3 +952,64 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode)) 
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+;;;scroll 
+(defmacro global-set-key* (keys &rest body)
+  `(global-set-key ,keys (lambda () (interactive) ,@body)))
+(global-set-key* [(shift control n)] (next-line) (scroll-up 1))
+(global-set-key* [(shift control p)] (previous-line) (scroll-down 1))
+
+(global-set-key [(control tab)] 'other-window)
+(global-set-key [(control shift right)] 'other-window-backward)
+
+(global-set-key (kbd "M-`") 'other-window-or-frame)
+
+;(global-set-key [?\M-o] 'occur)
+(global-set-key (kbd "C-c o") 'occur)
+(require 'anything)
+(require 'anything-config)
+(global-set-key (kbd "M-?") 'anything)
+(global-set-key (kbd "<F10>") 'follow-mode)
+
+(defun my-anything ()
+  (interactive)
+  (anything-other-buffer
+   '(anything-c-source-buffers
+     anything-c-source-file-name-history
+     anything-c-source-info-pages
+     anything-c-source-info-elisp
+     anything-c-source-man-pages
+     anything-c-source-locate
+     anything-c-source-emacs-commands
+	 anything-c-kill-ring
+	 anything-c-mark-ring)
+   " *my-anything*"))
+(global-set-key (kbd "C-c x") 'my-anything)
+
+;;;email mew
+(if (string-equal system-type "windows-nt")
+    ;; Note,in windows,you must use replace stunnel4 with stunnel3 version.
+    (setq mew-prog-ssl  "D:/program/stunnel/stunnel.exe")
+  (setq mew-prog-ssl "/usr/bin/stunnel"))
+(autoload 'mew "mew" nil t)
+(autoload 'mew-send "mew" nil t)
+ 
+;; Optional setup (Read Mail menu for Emacs 21):
+(if (boundp 'read-mail-command)
+    (setq read-mail-command 'mew))
+ 
+;; Optional setup (e.g. C-xm for sending a message):
+(autoload 'mew-user-agent-compose "mew" nil t)
+(if (boundp 'mail-user-agent)
+    (setq mail-user-agent 'mew-user-agent))
+(if (fboundp 'define-mail-user-agent)
+    (define-mail-user-agent
+      'mew-user-agent
+      'mew-user-agent-compose
+      'mew-draft-send-message
+      'mew-draft-kill
+      'mew-send-hook))
+(setq mew-name "design0er")
+(setq mew-pop-user "design0er@gmail")
+(setq mew-pop-server "pop.gmail.com")
+(setq mew-smtp-user "smtpuser@gmail.com")
+(setq mew-smtp-server "smtp.gmail.com")
