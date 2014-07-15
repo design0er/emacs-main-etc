@@ -441,7 +441,7 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 (global-set-key [f9] 'browse-kill-ring)
 
 ;;;;;;;;;;;icicles
-(add-to-list 'load-path  (concat os-plugin-path "icicles/"))
+(add-to-list 'load-path  (concat os-plugin-path "icicle/"))
 (require 'icicles)
 (icy-mode 1)
 
