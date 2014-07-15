@@ -1,37 +1,34 @@
 ;;;win7 "c:\Documents and Settings\Administrator\AppData\Roaming\.emacs"
 ;;;(load-file "e:/emacs-etc/basic")
-
+;;;;;;;;;;;debug
+(setq debug-on-error t)
 (setq os-etc-path "e:/emacs-etc/")
 (setq os-plugin-path "e:/emacs-plugin/")
 (setq os-git-path "d:/Documents/GitHub/")
+(add-to-list 'load-path "e:/emacs-plugin/")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;           basic           ;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (set-face-attribute 'default nil :font "YaHei Consolas Hybrid 10")
 (defun qiang-font-existsp (font)
-  (if (null (x-list-fonts font))
-      nil t))
-
+  (if (null (x-list-fonts font)) nil t))
 (defun qiang-make-font-string (font-name font-size)
   (if (and (stringp font-size)
            (equal ":" (string (elt font-size 0))))
       (format "%s%s" font-name font-size)
     (format "%s-%s" font-name font-size)))
-
 (defvar bhj-english-font-size nil)
 (defun qiang-set-font (english-fonts
                        english-font-size
                        chinese-fonts)
   "english-font-size could be set to \":pixelsize=18\" or a integer.
 If set/leave chinese-font-size to nil, it will follow english-font-size"
-  (require 'cl)                         ; for find if
+  (require 'cl)                         
   (setq bhj-english-font-size english-font-size)
   (let ((en-font (qiang-make-font-string
                   (find-if #'qiang-font-existsp english-fonts)
                   english-font-size))
         (zh-font (font-spec :family (find-if #'qiang-font-existsp chinese-fonts))))
-
     ;; Set the default English font
     ;;
     ;; The following 2 method cannot make the font settig work in new frames.
@@ -42,112 +39,57 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
      'default nil :font en-font)
     (set-face-font 'italic (font-spec :family "Liberation Mono" :slant 'italic :weight 'normal :size (+ 0.0 english-font-size)))
     (set-face-font 'bold-italic (font-spec :family "Liberation Mono" :slant 'italic :weight 'bold :size (+ 0.0 english-font-size)))
-
     ;; Set Chinese font
     ;; Do not use 'unicode charset, it will cause the english font setting invalid
     (dolist (charset '(kana han symbol cjk-misc bopomofo))
-      (set-fontset-font t
-                        charset
-                        zh-font))))
-
+      (set-fontset-font t charset zh-font))))
 ;(setq face-font-rescale-alist '(("Consolas" . 1.2) ("Microsoft Yahei" . 1.2) ("微软雅黑" . 1.2) ("WenQuanYi Zen Hei" . 1.2)))
 ;(defvar bhj-english-fonts '("Monaco" "Consolas" "DejaVu Sans Mono" "Monospace" "Courier New"))
 ;(defvar bhj-chinese-fonts '("YaHei Consolas Hybrid" "微软雅黑" "文泉驿等宽微米黑" "黑体" "新宋体" "宋体" "Microsoft Yahei"))
-;
-;(qiang-set-font
-; bhj-english-fonts
-; (if (file-exists-p "~/external/etc/.emacs-frame-font")
-;     (save-excursion
-;       (find-file "~/external/etc/.emacs-frame-font")
-;       (goto-char (point-min))
-;       (let ((monaco-font-size (read (current-buffer))))
-;         (kill-buffer (current-buffer))
-;         monaco-font-size))
-;   10.5)
-; bhj-chinese-fonts)
-;
-;(defvar bhj-english-font-size-steps '(10.5 11.5 12.5 14 18 22))
-;(defvar bhj-english-font-size-steps-dec (reverse bhj-english-font-size-steps))
-;(defun bhj-step-frame-font-size (step)
-;  (let ((steps bhj-english-font-size-steps)
-;        next-size)
-;    (if (< step 0)
-;        (setq steps bhj-english-font-size-steps-dec))
-;    (setq next-size
-;          (cadr (member bhj-english-font-size steps)))
-;    (when next-size
-;        (message "Your font size is set to %.1f" next-size)
-;        (qiang-set-font bhj-english-fonts next-size bhj-chinese-fonts))))
-;
 ;(global-set-key [(control x) (meta -)] (lambda () (interactive) (bhj-step-frame-font-size -1)))
 ;(global-set-key [(control x) (meta +)] (lambda () (interactive) (bhj-step-frame-font-size 1)))
-;
 ;(set-face-attribute 'default nil :font (font-spec))
-;
-;;;___________font______________________
-;;;end
-
 ;;;使用C-k 包含回车符
 (setq-default kill-whole-line t)
-
-(fset 'yes-or-no-p 'y-or-n-p)
 ;;;以 y/n代表 yes/no
-
+(fset 'yes-or-no-p 'y-or-n-p)
 (setq delete-by-moving-to-trash t)
-
-;;;___________cursor______________________
-
 ;;光标为竖线;方块为box
 (setq-default cursor-type 'bar)
 (setq-default blink-matching-delay 0.5)
-
 ;;;光标靠近鼠标指针时，让鼠标指针自动让开，别挡住视线
 (mouse-avoidance-mode 'animate)
-
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  '(blink-cursor-mode nil))
-;;;++++++++++++++++++++++++++++++++++++++++++++
-
 ;;;___________bookmark______________________
 (setq bookmark-default-file (concat os-etc-path "emacs.bmk"))
-
 ;;;同步更新书签文件或者退出时保存
 (setq bookmark-save-flag 1)
-;;;++++++++++++++++++++++++++++++++++++++++++++
-
 ;;;___________view______________________
 ;;;在标题栏显示buffer的名字
 ;;;(setq frame-title-format "emacs@%b")
-
 ;;;(line-number-mode t)                     ;; show line numbers
 ;;;(column-number-mode t)                   ;; show column numbers
 (when (fboundp size-indication-mode)
   (size-indication-mode t))              ;; show file size (emacs 22+)
-
 ;;;设置标题栏显示文件的完整路径名
 (setq frame-title-format
    '("%S" (buffer-file-name "%f"
     (dired-directory dired-directory "%b"))))
-
 ;;;直接打开和显示图片
 (auto-image-file-mode)
 (setq echo-keystrokes 0.1)
-
 ;;关闭起动时的那个“开机画面”
 (setq inhibit-startup-message t)
-
 (global-font-lock-mode 1)  
-
 ;; Also highlight parens  
 (setq show-paren-delay 0  
      show-paren-style 'parenthesis)  
 ;(setq default-fill-column 80);默认显示 80列
-;;;++++++++++++++++++++++++++++++++++++++++++++
-
 ;;;___________mode______________________
 (show-paren-mode 1)				
 ;显示时间
@@ -155,104 +97,72 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 (setq display-time-24hr-format t)
 ;显示匹配的括号
 (show-paren-mode t)
-
 ;;;打开就启用 text 模式
 (setq default-major-mode 'text-mode)
-
 (tool-bar-mode -1)
-;(menu-bar-mode nil)
+(menu-bar-mode nil)
 (scroll-bar-mode -1)
 (fringe-mode -1)
-;;;++++++++++++++++++++++++++++++++++++++++++++
-
 ;;;___________ibuffer mode______________________
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (autoload 'ibuffer "ibuffer" "List buffers." t)
-;;;++++++++++++++++++++++++++++++++++++++++++++
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;           nt              ;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;max-frame
-
 ;(defun w32-restore-fra	me ()
 ;	   "Restore a minimized	frame"
 ;   (interactive)		
 ;	(w32-send-sys-command 61728))
-;
 ;(defun w32-maximize-frame ()
 ;   "Maximize the current frame"
 ;	 (interactive)
 ;     (w32-send-sys-command 61488))
 ;	 
 ;(w32-maximize-frame)
-;
-
 (run-with-idle-timer 1 nil 'w32-send-sys-command 61488)
-
 (defun toggle-full-screen () (interactive) (shell-command "emacs_fullscreen.exe"))
 (global-set-key [f11] 'toggle-full-screen)
-
 ;;;use-window-key
 ;(setq w32-pass-lwindow-to-system nil) ;; prevent single keypress from activating Start Menu
 ;(setq w32-lwindow-modifier 'nil)      ;; make sure it's not used as a modifier
-;
 ;(define-key key-translation-map (kbd "<lwindow>") 'event-apply-super-modifier)
 ;(define-key key-translation-map (kbd "<apps>") 'event-apply-alt-modifier)
 
-;(global-set-key (kbd "s-l") 'kill-whole-line)
-;(global-set-key (kbd "s-o") 'other-window)
-;(global-set-key (kbd "s-k") 'kill-buffer)
+;;;	mark
+;;; Mark current word
+(defun my-mark-current-word (&optional arg allow-extend)
+  "Put point at beginning of current word, set mark at end."
+  (interactive "p\np")
+  (setq arg (if arg arg 1))
+  (if (and allow-extend
+           (or (and (eq last-command this-command) (mark t))
+               (region-active-p)))
+      (set-mark
+       (save-excursion
+         (when (< (mark) (point))
+           (setq arg (- arg)))
+         (goto-char (mark))
+         (forward-word arg)
+         (point)))
+    (let ((wbounds (bounds-of-thing-at-point 'word)))
+      (unless (consp wbounds)
+        (error "No word at point"))
+      (if (>= arg 0)
+          (goto-char (car wbounds))
+        (goto-char (cdr wbounds)))
+      (push-mark (save-excursion
+                   (forward-word arg)
+                   (point)))
+      (activate-mark))))
+(defun copy-word (&optional arg)
+ "Copy words at point"
+ (interactive "P")
+ (let ((beg (progn (if (looking-back "[a-zA-Z0-9]" 1) (backward-word 1)) (point))) 
+	(end (progn (forward-word arg) (point))))
+ (copy-region-as-kill beg end))
+)
+(global-set-key "\C-cs" 'my-mark-current-word)
+(global-set-key "\C-cS" 'copy-word)
 
-;(global-set-key (kbd "s-`") 'set-mark-command)
-;(global-set-key (kbd "s-0") 'undo)
-
-(global-set-key (kbd "C-2") 'set-mark-command)
-(global-set-key (kbd "C-1") 'linum-mode)
-
-;(global-set-key (kbd "s-1") 'linum-mode)
-;(global-set-key (kbd "s-2") 'column-number-mode)
-
-;(global-set-key (kbd "s-3") 'color-theme-emacs-21)
-;(global-set-key (kbd "s-4") 'color-theme-matrix)
-;
-;(global-set-key (kbd "s-5") 'menu-bar-mode)
-;(global-set-key (kbd "s-6") 'scroll-bar-mode)
-;(global-set-key (kbd "s-7") 'fringe-mode)
-;(global-set-key (kbd "s-8") 'tool-bar-mode)
-
-;; copy region or whole line
-(global-set-key "\M-w"
-				(lambda ()
-				  (interactive)
-				  (if mark-active
-					  (kill-ring-save (region-beginning)
-									  (region-end))
-					(progn
-					  (kill-ring-save (line-beginning-position)
-									  (line-end-position))
-					  (message "copied line")))))
-
-
-;; kill region or whole line
-(global-set-key "\C-w"
-				(lambda ()
-				  (interactive)
-				  (if mark-active
-					  (kill-region (region-beginning)
-								   (region-end))
-					(progn
-					  (kill-region (line-beginning-position)
-								   (line-end-position))
-					  (message "killed line")))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;           plugin          ;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(add-to-list 'load-path "e:/emacs-plugin/")
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;auto-complete plugin
 (require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories (concat os-plugin-path "/ac-dict"))
@@ -261,13 +171,7 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 ;which one effect?
 ;(setq auto-complete-mode t)
 (global-auto-complete-mode t)
-(global-set-key (kbd "<f2>") 'auto-complete-mode)
-;(define-key ac-mode-map [f2] )
-;(local-unset-key (kbd "<f2>"))
-;(local-unset-key [f2])
-;		(local-unset-key "f2")
-;		(global-unset-key "f")
-;		(global-unset-key "f2")
+(define-key ac-mode-map (kbd "f2") 'auto-complete)
 ;;;(ac-set-trigger-key "TAB")
 ;;;(setq ac-auto-start nil)
 ;;;(setq ac-auto-start 3)
@@ -285,12 +189,11 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 (set-face-underline 'ac-candidate-face "darkgray")
 (set-face-background 'ac-selection-face "steelblue")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(add-to-list 'load-path  (concat os-plugin-path "yasnippet-0.6.1c"))
-(require 'yasnippet) ;; not yasnippet-bundle
-(yas/initialize)
-(yas/load-directory (concat os-plugin-path "yasnippet-0.6.1c/snippets"))
+;(add-to-list 'load-path  (concat os-plugin-path "yasnippet-0.6.1c"))
+;(require 'yasnippet) ;; not yasnippet-bundle
+;(yas/initialize)
+;(yas/load-directory (concat os-plugin-path "yasnippet-0.6.1c/snippets"))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;color-theme
 ;;;(add-to-list 'load-path (concat os-plugin-path "theme"))
 ;;;(require 'color-theme)
@@ -859,16 +762,8 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
                    (forward-word arg)
                    (point)))
       (activate-mark))))
-(defun copy-word (&optional arg)
- "Copy words at point"
- (interactive "P")
- (let ((beg (progn (if (looking-back "[a-zA-Z0-9]" 1) (backward-word 1)) (point))) 
-	(end (progn (forward-word arg) (point))))
- (copy-region-as-kill beg end))
-)
+(global-set-key "\C-cw" 'my-mark-current-word)
 
-(global-set-key "\C-cs" 'my-mark-current-word)
-(global-set-key "\C-cS" 'copy-word)
 ;;;; MakingMarkVisible
 ;;; Author: Patrick Gundlach 
 ;;; nice mark - shows mark as a highlighted 'cursor' so user 'always' 
@@ -901,13 +796,36 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 ;(ad-activate 'exchange-point-and-mark)
 ;(add-hook 'activate-mark-hook 'pg-show-mark)
 
+
+;;;; MakingMarkVisible
+;;; Author: Patrick Gundlach 
+;;; nice mark - shows mark as a highlighted 'cursor' so user 'always' 
+;;; sees where the mark is. Especially nice for killing a region.
+;(defvar pg-mark-overlay nil
+;  "Overlay to show the position where the mark is") 
+;(make-variable-buffer-local 'pg-mark-overlay)
+;(put 'pg-mark-mark 'face 'secondary-selection)
+;(defvar pg-mark-old-position nil
+;  "The position the mark was at. To be able to compare with the
+;current position")
+;(defun pg-show-mark () 
+;  "Display an overlay where the mark is at. Should be hooked into 
+;activate-mark-hook" 
+;  (unless pg-mark-overlay 
+;    (setq pg-mark-overlay (make-overlay 0 0))
+;    (overlay-put pg-mark-overlay 'category 'pg-mark-mark))
+;  (let ((here (mark t)))
+;    (when here
+;      (move-overlay pg-mark-overlay here (1+ here)))))
+;(defadvice  exchange-point-and-mark (after pg-mark-exchange-point-and-mark)
+;  "Show visual marker"
+;  (pg-show-mark))
+;(ad-activate 'exchange-point-and-mark)
+;(add-hook 'activate-mark-hook 'pg-show-mark)
 ;;;transpose-frame.el
 (require 'transpose-frame)
 (global-set-key "\C-c1" 'transpose-frame)
-
-;;;--------------------------------------------------
 ;;;	insert date
-;;;--------------------------------------------------
 ;insert-current-date
 (defun insert-current-date ()
     "Insert the current date"
@@ -917,34 +835,30 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 					" "
 					(format-time-string "%H:%M:%S" (current-time)))))
 (global-set-key "\C-cW" 'insert-current-date)
-
-
 ;insert-current-time
 (defun insert-current-time ()
     "Insert the current time"
-    (interactive "*")
-    ;(insert (format-time-string "%Y/%m/%d %H:%M:%S" (current-time))))
+    ;(insert (format-time-string "%Y/%m/%d %H:%M:%S" (current-time)))
     (insert (format-time-string "%H:%M:%S" (current-time))))
-(global-set-key "\C-cw" 'insert-current-time) 
+(global-set-key "\C-cw" 'insert-current-time)
 ;;;	weibo
 (add-to-list 'load-path "e:/emacs-plugin/weibo.emacs-master/weibo.emacs-master/")
 (require 'weibo)
-
 (setq url-using-proxy nil)
 ;(setq url-using-proxy t)
 ;(setq url-proxy-services '(("http"  . "http://127.0.0.1:8087")
 ;                            "https" . "http://127.0.0.1:8087"))
-
 (add-to-list 'load-path (concat os-plugin-path "/evil/"))
 (require 'evil)  
 ;(evil-mode 1)
-
+(global-set-key (kbd "<f7>") 'evil-mode)
 ;;;c# mode
 (autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
 (setq auto-mode-alist
 	  (append '(("\\.cs$" . csharp-mode)) auto-mode-alist))
 ;;;web mode
 (require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode)) 
 (add-to-list 'auto-mode-alist '("\\.jsp\\'" . web-mode)) 
@@ -957,21 +871,16 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
   `(global-set-key ,keys (lambda () (interactive) ,@body)))
 (global-set-key* [(shift control n)] (next-line) (scroll-up 1))
 (global-set-key* [(shift control p)] (previous-line) (scroll-down 1))
-
 (global-set-key [(control tab)] 'other-window)
 (global-set-key [(control shift right)] 'other-window-backward)
-
 (global-set-key (kbd "M-`") 'other-window-or-frame)
-
 ;(global-set-key [?\M-o] 'occur)
 (global-set-key (kbd "C-c o") 'occur)
 (require 'anything)
 (require 'anything-config)
 (global-set-key (kbd "M-?") 'anything)
 (global-set-key (kbd "<F10>") 'follow-mode)
-
 (defun my-anything ()
-  (interactive)
   (anything-other-buffer
    '(anything-c-source-buffers
      anything-c-source-file-name-history
@@ -984,7 +893,6 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 	 anything-c-mark-ring)
    " *my-anything*"))
 (global-set-key (kbd "C-c x") 'my-anything)
-
 ;;;email mew
 (if (string-equal system-type "windows-nt")
     ;; Note,in windows,you must use replace stunnel4 with stunnel3 version.
@@ -996,7 +904,6 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 ;; Optional setup (Read Mail menu for Emacs 21):
 (if (boundp 'read-mail-command)
     (setq read-mail-command 'mew))
- 
 ;; Optional setup (e.g. C-xm for sending a message):
 (autoload 'mew-user-agent-compose "mew" nil t)
 (if (boundp 'mail-user-agent)
@@ -1013,3 +920,52 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 (setq mew-pop-server "pop.gmail.com")
 (setq mew-smtp-user "smtpuser@gmail.com")
 (setq mew-smtp-server "smtp.gmail.com")
+;;;solarized theme
+(add-to-list 'custom-theme-load-path (concat os-plugin-path "emacs-color-theme-solarized-master"))
+(load-theme 'solarized-dark t)
+;(color-theme-solarized-dark)
+;(color-theme-solarized-light)
+;;; quiet, please! No dinging!
+(setq visible-bell nil)
+
+(defun uniq-lines (beg end)
+  "Unique lines in region.
+Called from a program, there are two arguments:
+BEG and END (region to sort)."
+  (interactive "r")
+  (save-excursion
+    (save-restriction
+      (narrow-to-region beg end)
+      (goto-char (point-min))
+      (while (not (eobp))
+        (kill-line 1)
+        (yank)
+        (let ((next-line (point)))
+          (while
+              (re-search-forward
+               (format "^%s" (regexp-quote (car kill-ring))) nil t)
+            (replace-match "" nil nil))
+          (goto-char next-line))))))
+;;;Track Emacs commands frequency
+;(require 'keyfreq)
+;(keyfreq-mode 1)
+;(keyfreq-autosave-mode 1)
+
+;; copy region or whole line
+(global-set-key "\M-w"
+		(lambda ()
+		  (interactive)
+		  (if mark-active
+		      (kill-ring-save (region-beginning)
+				      (region-end))
+		    (progn
+		      (kill-ring-save (line-beginning-position)
+				      (line-end-position))
+		      (message "copied line")))))
+;; kill region or whole line
+(global-set-key "\C-w"
+		(kill-region (region-beginning)
+			     (region-end))
+		(kill-region (line-beginning-position)
+			     (line-end-position))
+		(message "killed line"))
