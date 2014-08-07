@@ -1,6 +1,5 @@
 ;;;win7 "c:\Documents and Settings\Administrator\AppData\Roaming\.emacs"
 ;;;(load-file "e:/emacs-etc/basic")
-;;;;;;;;;;;debug
 (setq debug-on-error t)
 (setq os-etc-path "e:/emacs-etc/")
 (setq os-plugin-path "e:/emacs-plugin/")
@@ -9,7 +8,9 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;           basic           ;;;;;;;;;;;;
+;(set-default-font "Source Code Pro")
 (set-face-attribute 'default nil :font "YaHei Consolas Hybrid 10")
+;(set-face-attribute 'default nil :font "Source Han Sans 10")
 (defun qiang-font-existsp (font)
   (if (null (x-list-fonts font)) nil t))
 (defun qiang-make-font-string (font-name font-size)
@@ -44,15 +45,16 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
     (dolist (charset '(kana han symbol cjk-misc bopomofo))
       (set-fontset-font t charset zh-font))))
 ;(setq face-font-rescale-alist '(("Consolas" . 1.2) ("Microsoft Yahei" . 1.2) ("微软雅黑" . 1.2) ("WenQuanYi Zen Hei" . 1.2)))
-;(defvar bhj-english-fonts '("Monaco" "Consolas" "DejaVu Sans Mono" "Monospace" "Courier New"))
-;(defvar bhj-chinese-fonts '("YaHei Consolas Hybrid" "微软雅黑" "文泉驿等宽微米黑" "黑体" "新宋体" "宋体" "Microsoft Yahei"))
+(defvar bhj-english-fonts '("Monaco" "Consolas" "DejaVu Sans Mono" "Monospace" "Courier New"))
+(defvar bhj-chinese-fonts '("YaHei Consolas Hybrid" "微软雅黑" "文泉驿等宽微米黑" "黑体" "新宋体" "宋体" "Microsoft Yahei"))
 ;(global-set-key [(control x) (meta -)] (lambda () (interactive) (bhj-step-frame-font-size -1)))
 ;(global-set-key [(control x) (meta +)] (lambda () (interactive) (bhj-step-frame-font-size 1)))
-;(set-face-attribute 'default nil :font (font-spec))
+(set-face-attribute 'default nil :font (font-spec))
 ;;;使用C-k 包含回车符
 (setq-default kill-whole-line t)
 ;;;以 y/n代表 yes/no
 (fset 'yes-or-no-p 'y-or-n-p)
+;;;删除至回收站
 (setq delete-by-moving-to-trash t)
 ;;光标为竖线;方块为box
 (setq-default cursor-type 'bar)
@@ -100,7 +102,7 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 ;;;打开就启用 text 模式
 (setq default-major-mode 'text-mode)
 (tool-bar-mode -1)
-(menu-bar-mode nil)
+(menu-bar-mode -1)
 (scroll-bar-mode -1)
 (fringe-mode -1)
 ;;;___________ibuffer mode______________________
@@ -120,7 +122,7 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 ;(w32-maximize-frame)
 (run-with-idle-timer 1 nil 'w32-send-sys-command 61488)
 (defun toggle-full-screen () (interactive) (shell-command "emacs_fullscreen.exe"))
-(global-set-key [f11] 'toggle-full-screen)
+;(global-set-key [f11] 'toggle-full-screen)
 ;;;use-window-key
 ;(setq w32-pass-lwindow-to-system nil) ;; prevent single keypress from activating Start Menu
 ;(setq w32-lwindow-modifier 'nil)      ;; make sure it's not used as a modifier
@@ -171,7 +173,8 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 ;which one effect?
 ;(setq auto-complete-mode t)
 (global-auto-complete-mode t)
-(define-key ac-mode-map (kbd "f2") 'auto-complete)
+;(define-key ac-mode-map (kbd "f2") 'auto-complete)
+(global-set-key [f2] 'auto-complete-mode)
 ;;;(ac-set-trigger-key "TAB")
 ;;;(setq ac-auto-start nil)
 ;;;(setq ac-auto-start 3)
@@ -189,10 +192,10 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 (set-face-underline 'ac-candidate-face "darkgray")
 (set-face-background 'ac-selection-face "steelblue")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;(add-to-list 'load-path  (concat os-plugin-path "yasnippet-0.6.1c"))
-;(require 'yasnippet) ;; not yasnippet-bundle
-;(yas/initialize)
-;(yas/load-directory (concat os-plugin-path "yasnippet-0.6.1c/snippets"))
+(add-to-list 'load-path  (concat os-plugin-path "yasnippet-0.6.1c"))
+(require 'yasnippet) ;; not yasnippet-bundle
+(yas/initialize)
+(yas/load-directory (concat os-plugin-path "yasnippet-0.6.1c/snippets"))
 
 ;;;;color-theme
 ;;;(add-to-list 'load-path (concat os-plugin-path "theme"))
@@ -252,9 +255,9 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;keisen-mode是一个用来绘制表格的好工具
-(if window-system
-  (autoload 'keisen-mode "keisen-mouse" "MULE table" t)
-    (autoload 'keisen-mode "keisen-mule" "MULE table" t))
+;(if window-system
+;  (autoload 'keisen-mode "keisen-mouse" "MULE table" t)
+;    (autoload 'keisen-mode "keisen-mule" "MULE table" t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'highlight-symbol)
@@ -423,7 +426,7 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 ;;;;;;;;;;;linum+
 (require 'linum+)
 ;;;(fringe-mode)
-(require 'frame-cmds)
+;(require 'frame-cmds)
 
 ;;;;;;;;;;;nxhtml
 ;(load (concat os-plugin-path "nxhtml/autostart.el"))
@@ -468,10 +471,10 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 ;(setq scheme-program-name "guile")
 ;(setq scheme-program-name "mit-scheme")
 ;;;;;;;;;;;;;;quack.el
-(require 'quack)
+;(require 'quack)
 
 ;;;;;;;;;;;;;;cmuscheme.el
-(autoload 'run-scheme "cmuscheme" "Run an inferior Scheme process." t)
+;(autoload 'run-scheme "cmuscheme" "Run an inferior Scheme process." t)
 
 (setq auto-mode-alist 
       (cons '("\\.scm$" . scheme-mode)  
@@ -499,7 +502,7 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;org-mode
 (add-to-list 'load-path (concat os-git-path "org-mode/lisp/"))
-(add-to-list 'load-path (concat os-git-path "org-mode/contrib/lisp/") t)
+(add-to-list 'load-path (concat os-git-path "org-mode/contrib/lisp/"))
 
 (setq org-hide-leading-stars t)
 (setq org-todo-keywords
@@ -565,13 +568,13 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
                  (interactive) (dired-sort-other (concat dired-listing-switches ""))))))
 
 ;;;;;;;;;;;psd-mode
-;(defalias 'full-copy-sparse-keymap 'copy-keymap)
-(defun full-copy-sparse-keymap (km)
-  "Recursively copy the sparse keymap KM"
-  (cond ((consp km)
-	 (cons (full-copy-sparse-keymap (car km))
-	       (full-copy-sparse-keymap (cdr km))))
-	(t km)))
+;;(defalias 'full-copy-sparse-keymap 'copy-keymap)
+;(defun full-copy-sparse-keymap (km)
+;  "Recursively copy the sparse keymap KM"
+;  (cond ((consp km)
+;	 (cons (full-copy-sparse-keymap (car km))
+;	       (full-copy-sparse-keymap (cdr km))))
+;	(t km)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;           program         ;;;;;;;;;;;;
@@ -641,9 +644,6 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 ;;;                   (cons setting auto-mode-alist))))
 ;;; '(("\\.jsp$".  nxml-mode)))
 
-;;;;;;;;;;;debug
-(setq debug-on-error t)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;           util            ;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -653,9 +653,9 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 
 ;;;windows move:emacs internal
 ;;The ‘fbound’ test is for those XEmacs installations that don’t have the windmove package available.
-(when (fboundp 'windmove-default-keybindings)
-  (windmove-default-keybindings))
-;
+;(when (fboundp 'windmove-default-keybindings)
+;  (windmove-default-keybindings))
+
 ;;key binding
 ;;(windmove-default-keybindings 'meta)
 ;
@@ -716,10 +716,10 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 
 ;;;by hunter
 
-(global-set-key [C-M-down] 'shrink-window)
-(global-set-key [C-M-up] 'enlarge-window)
-(global-set-key [C-M-left] 'shrink-window-horizontally)
-(global-set-key [C-M-right] 'enlarge-window-horizontally)
+;(global-set-key [C-M-down] 'shrink-window)
+;(global-set-key [C-M-up] 'enlarge-window)
+;(global-set-key [C-M-left] 'shrink-window-horizontally)
+;(global-set-key [C-M-right] 'enlarge-window-horizontally)
 
 ;;(global-set-key [C-M-up] 'win-resize-enlarge-horiz)
 ;;(global-set-key [C-M-down] 'win-resize-minimize-horiz)
@@ -727,104 +727,73 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
 ;;(global-set-key [C-M-right] 'win-resize-minimize-vert)
 
 ;;;always in three windows
-(load-file (concat os-plugin-path "three-windows.el"))
+;(load-file (concat os-plugin-path "three-windows.el"))
 
 ;;;work-win-nine.el
 ;;;save 9 workplace always
-(load-file (concat os-plugin-path "work-win-nine.el"))
+;(load-file (concat os-plugin-path "work-win-nine.el"))
 
 ;;;--------------------------------------------------
 ;;;	mark
 ;;;--------------------------------------------------
 
 ;;; Mark current word
-(defun my-mark-current-word (&optional arg allow-extend)
-  "Put point at beginning of current word, set mark at end."
-  (interactive "p\np")
-  (setq arg (if arg arg 1))
-  (if (and allow-extend
-           (or (and (eq last-command this-command) (mark t))
-               (region-active-p)))
-      (set-mark
-       (save-excursion
-         (when (< (mark) (point))
-           (setq arg (- arg)))
-         (goto-char (mark))
-         (forward-word arg)
-         (point)))
-    (let ((wbounds (bounds-of-thing-at-point 'word)))
-      (unless (consp wbounds)
-        (error "No word at point"))
-      (if (>= arg 0)
-          (goto-char (car wbounds))
-        (goto-char (cdr wbounds)))
-      (push-mark (save-excursion
-                   (forward-word arg)
-                   (point)))
-      (activate-mark))))
-(global-set-key "\C-cw" 'my-mark-current-word)
+;(defun my-mark-current-word (&optional arg allow-extend)
+;  "Put point at beginning of current word, set mark at end."
+;  (interactive "p\np")
+;  (setq arg (if arg arg 1))
+;  (if (and allow-extend
+;           (or (and (eq last-command this-command) (mark t))
+;               (region-active-p)))
+;      (set-mark
+;       (save-excursion
+;         (when (< (mark) (point))
+;           (setq arg (- arg)))
+;         (goto-char (mark))
+;         (forward-word arg)
+;         (point)))
+;    (let ((wbounds (bounds-of-thing-at-point 'word)))
+;      (unless (consp wbounds)
+;        (error "No word at point"))
+;      (if (>= arg 0)
+;          (goto-char (car wbounds))
+;        (goto-char (cdr wbounds)))
+;      (push-mark (save-excursion
+;                   (forward-word arg)
+;                   (point)))
+;      (activate-mark))))
+;(global-set-key "\C-cw" 'my-mark-current-word)
 
 ;;;; MakingMarkVisible
 ;;; Author: Patrick Gundlach 
 ;;; nice mark - shows mark as a highlighted 'cursor' so user 'always' 
 ;;; sees where the mark is. Especially nice for killing a region.
-;
-;(defvar pg-mark-overlay nil
-;  "Overlay to show the position where the mark is") 
-;(make-variable-buffer-local 'pg-mark-overlay)
-;
-;(put 'pg-mark-mark 'face 'secondary-selection)
-;
-;(defvar pg-mark-old-position nil
-;  "The position the mark was at. To be able to compare with the
-;current position")
-;
-;(defun pg-show-mark () 
-;  "Display an overlay where the mark is at. Should be hooked into 
-;activate-mark-hook" 
-;  (unless pg-mark-overlay 
-;    (setq pg-mark-overlay (make-overlay 0 0))
-;    (overlay-put pg-mark-overlay 'category 'pg-mark-mark))
-;  (let ((here (mark t)))
-;    (when here
-;      (move-overlay pg-mark-overlay here (1+ here)))))
-;
-;(defadvice  exchange-point-and-mark (after pg-mark-exchange-point-and-mark)
-;  "Show visual marker"
-;  (pg-show-mark))
-;
-;(ad-activate 'exchange-point-and-mark)
-;(add-hook 'activate-mark-hook 'pg-show-mark)
 
+(defvar pg-mark-overlay nil
+  "Overlay to show the position where the mark is") 
+(make-variable-buffer-local 'pg-mark-overlay)
+(put 'pg-mark-mark 'face 'secondary-selection)
+(defvar pg-mark-old-position nil
+  "The position the mark was at. To be able to compare with the
+current position")
+(defun pg-show-mark () 
+  "Display an overlay where the mark is at. Should be hooked into 
+activate-mark-hook" 
+  (unless pg-mark-overlay 
+    (setq pg-mark-overlay (make-overlay 0 0))
+    (overlay-put pg-mark-overlay 'category 'pg-mark-mark))
+  (let ((here (mark t)))
+    (when here
+      (move-overlay pg-mark-overlay here (1+ here)))))
+(defadvice  exchange-point-and-mark (after pg-mark-exchange-point-and-mark)
+  "Show visual marker"
+  (pg-show-mark))
+(ad-activate 'exchange-point-and-mark)
+(add-hook 'activate-mark-hook 'pg-show-mark)
 
-;;;; MakingMarkVisible
-;;; Author: Patrick Gundlach 
-;;; nice mark - shows mark as a highlighted 'cursor' so user 'always' 
-;;; sees where the mark is. Especially nice for killing a region.
-;(defvar pg-mark-overlay nil
-;  "Overlay to show the position where the mark is") 
-;(make-variable-buffer-local 'pg-mark-overlay)
-;(put 'pg-mark-mark 'face 'secondary-selection)
-;(defvar pg-mark-old-position nil
-;  "The position the mark was at. To be able to compare with the
-;current position")
-;(defun pg-show-mark () 
-;  "Display an overlay where the mark is at. Should be hooked into 
-;activate-mark-hook" 
-;  (unless pg-mark-overlay 
-;    (setq pg-mark-overlay (make-overlay 0 0))
-;    (overlay-put pg-mark-overlay 'category 'pg-mark-mark))
-;  (let ((here (mark t)))
-;    (when here
-;      (move-overlay pg-mark-overlay here (1+ here)))))
-;(defadvice  exchange-point-and-mark (after pg-mark-exchange-point-and-mark)
-;  "Show visual marker"
-;  (pg-show-mark))
-;(ad-activate 'exchange-point-and-mark)
-;(add-hook 'activate-mark-hook 'pg-show-mark)
 ;;;transpose-frame.el
-(require 'transpose-frame)
-(global-set-key "\C-c1" 'transpose-frame)
+;(require 'transpose-frame)
+;(global-set-key "\C-c1" 'transpose-frame)
 ;;;	insert date
 ;insert-current-date
 (defun insert-current-date ()
@@ -871,85 +840,89 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
   `(global-set-key ,keys (lambda () (interactive) ,@body)))
 (global-set-key* [(shift control n)] (next-line) (scroll-up 1))
 (global-set-key* [(shift control p)] (previous-line) (scroll-down 1))
+
 (global-set-key [(control tab)] 'other-window)
 (global-set-key [(control shift right)] 'other-window-backward)
-(global-set-key (kbd "M-`") 'other-window-or-frame)
+;(global-set-key (kbd "M-`") 'other-window-or-frame)
 ;(global-set-key [?\M-o] 'occur)
 (global-set-key (kbd "C-c o") 'occur)
+
 (require 'anything)
 (require 'anything-config)
 (global-set-key (kbd "M-?") 'anything)
-(global-set-key (kbd "<F10>") 'follow-mode)
-(defun my-anything ()
-  (anything-other-buffer
-   '(anything-c-source-buffers
-     anything-c-source-file-name-history
-     anything-c-source-info-pages
-     anything-c-source-info-elisp
-     anything-c-source-man-pages
-     anything-c-source-locate
-     anything-c-source-emacs-commands
-	 anything-c-kill-ring
-	 anything-c-mark-ring)
-   " *my-anything*"))
-(global-set-key (kbd "C-c x") 'my-anything)
+
+;(defun my-anything ()
+;  (anything-other-buffer
+;   '(anything-c-source-buffers
+;     anything-c-source-file-name-history
+;     anything-c-source-info-pages
+;     anything-c-source-info-elisp
+;     anything-c-source-man-pages
+;     anything-c-source-locate
+;     anything-c-source-emacs-commands
+;	 anything-c-kill-ring
+;	 anything-c-mark-ring)
+;   " *my-anything*"))
+;(global-set-key (kbd "C-c x") 'my-anything)
+
 ;;;email mew
-(if (string-equal system-type "windows-nt")
-    ;; Note,in windows,you must use replace stunnel4 with stunnel3 version.
-    (setq mew-prog-ssl  "D:/program/stunnel/stunnel.exe")
-  (setq mew-prog-ssl "/usr/bin/stunnel"))
-(autoload 'mew "mew" nil t)
-(autoload 'mew-send "mew" nil t)
- 
-;; Optional setup (Read Mail menu for Emacs 21):
-(if (boundp 'read-mail-command)
-    (setq read-mail-command 'mew))
-;; Optional setup (e.g. C-xm for sending a message):
-(autoload 'mew-user-agent-compose "mew" nil t)
-(if (boundp 'mail-user-agent)
-    (setq mail-user-agent 'mew-user-agent))
-(if (fboundp 'define-mail-user-agent)
-    (define-mail-user-agent
-      'mew-user-agent
-      'mew-user-agent-compose
-      'mew-draft-send-message
-      'mew-draft-kill
-      'mew-send-hook))
-(setq mew-name "design0er")
-(setq mew-pop-user "design0er@gmail")
-(setq mew-pop-server "pop.gmail.com")
-(setq mew-smtp-user "smtpuser@gmail.com")
-(setq mew-smtp-server "smtp.gmail.com")
+;(if (string-equal system-type "windows-nt")
+;    ;; Note,in windows,you must use replace stunnel4 with stunnel3 version.
+;    (setq mew-prog-ssl  "D:/program/stunnel/stunnel.exe")
+;  (setq mew-prog-ssl "/usr/bin/stunnel"))
+;(autoload 'mew "mew" nil t)
+;(autoload 'mew-send "mew" nil t)
+; 
+;;; Optional setup (Read Mail menu for Emacs 21):
+;(if (boundp 'read-mail-command)
+;    (setq read-mail-command 'mew))
+;;; Optional setup (e.g. C-xm for sending a message):
+;(autoload 'mew-user-agent-compose "mew" nil t)
+;(if (boundp 'mail-user-agent)
+;    (setq mail-user-agent 'mew-user-agent))
+;(if (fboundp 'define-mail-user-agent)
+;    (define-mail-user-agent
+;      'mew-user-agent
+;      'mew-user-agent-compose
+;      'mew-draft-send-message
+;      'mew-draft-kill
+;      'mew-send-hook))
+;(setq mew-name "design0er")
+;(setq mew-pop-user "design0er@gmail")
+;(setq mew-pop-server "pop.gmail.com")
+;(setq mew-smtp-user "smtpuser@gmail.com")
+;(setq mew-smtp-server "smtp.gmail.com")
 ;;;solarized theme
 (add-to-list 'custom-theme-load-path (concat os-plugin-path "emacs-color-theme-solarized-master"))
 (load-theme 'solarized-dark t)
-;(color-theme-solarized-dark)
-;(color-theme-solarized-light)
+;(load-theme 'solarized-light t)
 ;;; quiet, please! No dinging!
 (setq visible-bell nil)
 
-(defun uniq-lines (beg end)
-  "Unique lines in region.
-Called from a program, there are two arguments:
-BEG and END (region to sort)."
-  (interactive "r")
-  (save-excursion
-    (save-restriction
-      (narrow-to-region beg end)
-      (goto-char (point-min))
-      (while (not (eobp))
-        (kill-line 1)
-        (yank)
-        (let ((next-line (point)))
-          (while
-              (re-search-forward
-               (format "^%s" (regexp-quote (car kill-ring))) nil t)
-            (replace-match "" nil nil))
-          (goto-char next-line))))))
+;(defun uniq-lines (beg end)
+;  "Unique lines in region.
+;Called from a program, there are two arguments:
+;BEG and END (region to sort)."
+;  (interactive "r")
+;  (save-excursion
+;    (save-restriction
+;      (narrow-to-region beg end)
+;      (goto-char (point-min))
+;      (while (not (eobp))
+;        (kill-line 1)
+;        (yank)
+;        (let ((next-line (point)))
+;          (while
+;              (re-search-forward
+;               (format "^%s" (regexp-quote (car kill-ring))) nil t)
+;            (replace-match "" nil nil))
+;          (goto-char next-line))))))
+
 ;;;Track Emacs commands frequency
-;(require 'keyfreq)
-;(keyfreq-mode 1)
-;(keyfreq-autosave-mode 1)
+;;;keyfreq-show
+(require 'keyfreq)
+(keyfreq-mode 1)
+(keyfreq-autosave-mode 1)
 
 ;; copy region or whole line
 (global-set-key "\M-w"
@@ -964,8 +937,60 @@ BEG and END (region to sort)."
 		      (message "copied line")))))
 ;; kill region or whole line
 (global-set-key "\C-w"
-		(kill-region (region-beginning)
-			     (region-end))
-		(kill-region (line-beginning-position)
-			     (line-end-position))
-		(message "killed line"))
+				(lambda ()
+				  (interactive)
+				  (if mark-active
+					  (kill-region (region-beginning)
+								   (region-end))
+					(progn
+					  (kill-region (line-beginning-position)
+								   (line-end-position))
+					  (message "killed line")))))
+
+(global-set-key (kbd "C-`") 'set-mark-command)
+(global-set-key (kbd "C-1") 'linum-mode)
+		
+(global-set-key (kbd "<f11>") 'follow-delete-other-windows-and-split)
+;(global-set-key (kbd "<f11>") 'follow-mode)
+
+;;
+;; ace jump mode major function
+;;
+;;;Usage:
+;;;
+;;;"C-c SPC" ==> ace-jump-word-mode
+;;;
+;;;    enter first character of a word, select the highlighted key to move to it.
+;;;
+;;;"C-u C-c SPC" ==> ace-jump-char-mode
+;;;
+;;;    enter a character for query, select the highlighted key to move to it.
+;;;
+;;;"C-u C-u C-c SPC" ==> ace-jump-line-mode
+;;;
+;;;    each non-empty line will be marked, select the highlighted key to move to it.
+;;;
+(add-to-list 'load-path (concat os-plugin-path "ace-jump-mode-master"))
+(autoload
+  'ace-jump-mode
+  "ace-jump-mode"
+  "Emacs quick move minor mode"
+  t)
+;; you can select the key you prefer to
+(define-key global-map (kbd "M-`") 'ace-jump-mode)
+(define-key global-map (kbd "<f1>") 'ace-jump-mode)
+;(define-key global-map (kbd "M-`") 'ace-jump-char-mode)
+;; enable a more powerful jump back function from ace jump mode
+(autoload
+  'ace-jump-mode-pop-mark
+  "ace-jump-mode"
+  "Ace jump back:-)"
+  t)
+(eval-after-load "ace-jump-mode"
+  '(ace-jump-mode-enable-mark-sync))
+(define-key global-map (kbd "M-SPC") 'ace-jump-mode-pop-mark)
+;; 
+;;If you use viper mode :
+;(define-key viper-vi-global-user-map (kbd "SPC") 'ace-jump-mode)
+;;If you use evil
+;(define-key evil-normal-state-map (kbd "SPC") 'ace-jump-mode)
