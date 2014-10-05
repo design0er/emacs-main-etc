@@ -880,12 +880,12 @@ activate-mark-hook"
 (global-set-key* [(shift control n)] (next-line) (scroll-up 1))
 (global-set-key* [(shift control p)] (previous-line) (scroll-down 1))
 
-(global-set-key (kbd "C-c o") 'occur)
-
+(global-set-key (kbd "C-c o") 'multi-occur-in-matching-buffers)
+(global-set-key (kbd "C-c u") 're-builder)
 (require 'anything)
 (require 'anything-config)
 ;(global-set-key (kbd "M-?") 'anything)
-(global-set-key (kbd "<f7>") 'anything)
+(global-set-key (kbd "<f4>") 'anything)
 ;(defun my-anything ()
 ;  (anything-other-buffer
 ;   '(anything-c-source-buffers
@@ -1006,7 +1006,7 @@ activate-mark-hook"
 								 ((evil-replace-state-p) '("#ffffff" . "#de770d"))
 								 ((evil-operator-state-p) '("#ffffff" . "#a511e8"))
 								 ((evil-insert-state-p) '("#ffffff" . "#287636"))
-								 ((evil-emacs-state-p)  '("#ffffff" . "#444488"))
+								 ((evil-emacs-state-p)  '("#00bf00" . "#000000"))
 								 ((buffer-modified-p)   '("#ffffff" . "#123456"))
 								 (t default-color))))
 				(set-face-background 'mode-line (car color))
@@ -1108,3 +1108,6 @@ activate-mark-hook"
 ;(powerline-vim-theme)
 ;(powerline-center-evil-theme)
 ;(powerline-revert)
+
+(require 're-builder)
+(setq reb-re-syntax 'string)
